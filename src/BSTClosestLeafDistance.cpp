@@ -39,7 +39,94 @@ struct node{
   struct node *right;
 };
 
+
+struct node* getParentNode(struct node* root, int data){
+
+	struct node *leftNode = NULL, *rightNode = NULL;
+
+	if (root == NULL)
+		return NULL;
+
+	if (root->left != NULL){
+		if (root->left->data == data)
+			return root;
+	}
+	if (root->right != NULL){
+		if (root->right->data == data)
+			return root;
+	}
+
+	if (root->left != NULL){
+		leftNode = getParentNode(root->left, data);
+	}
+	if (root->right != NULL){
+		rightNode = getParentNode(root->right, data);
+	}
+
+	
+	return leftNode!=NULL?leftNode:rightNode;
+	
+		
+}
+
+
+
+
+int min(int a, int b){
+
+	if (a != -1 && b != -1)
+		return a > b ? b : a;
+
+	if (a == -1){
+		return b;
+	}
+	if (b == -1){
+		return a;
+	}
+
+}
+
+int downTraversalDisatnce(struct node *root){
+
+	int leftDistance, rightDistance;
+	if (root == NULL)
+		return -1;
+
+	if (root->left == NULL && root->right == NULL)
+		return 0;
+
+	leftDistance = downTraversalDisatnce(root->left);
+	rightDistance = downTraversalDisatnce(root->right);
+
+	int minimum = min(leftDistance, rightDistance);
+
+	return minimum+1;
+
+}
+
+
+
 int get_closest_leaf_distance(struct node *root, struct node *temp)
 {
-  return -1;
+	if (root == NULL || temp == NULL)
+		return -1;
+
+	int downDistance = downTraversalDisatnce(temp);
+
+	struct node* parent = getParentNode(root, temp->data);
+
+	if (parent == NULL)
+		return downDistance;
+
+	int topTraversalDistance = get_closest_leaf_distance(root, parent);
+
+	if (topTraversalDistance == downDistance)
+		return topTraversalDistance;
+
+	int minimum = min(topTraversalDistance, downDistance);
+
+	if (minimum == topTraversalDistance)
+		return 1 + topTraversalDistance;
+
+	return downDistance;
 }

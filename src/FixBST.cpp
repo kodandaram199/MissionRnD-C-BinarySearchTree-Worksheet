@@ -32,24 +32,24 @@ struct node{
 	struct node *right;
 };
 
-void fixedBST(struct node* root, struct node** current, struct node** middle, struct node** last, struct node** prev)
+void fixedBST(struct node* root, struct node** current, struct node** mid, struct node** last, struct node** prev)
 {
 	if (root!=NULL)
 	{
-		fixedBST(root->left, current, middle, last, prev);
+		fixedBST(root->left, current, mid, last, prev);
 		if ((*prev!=NULL) && (root->data < (*prev)->data))
 		{
 			
 			if (*current==NULL)
 			{
 				*current = *prev;
-				*middle = root;
+				*mid = root;
 			}
 			else
 				*last = root;
 		}
 		*prev = root;
-		fixedBST(root->right, current, middle, last, prev);
+		fixedBST(root->right, current, mid, last, prev);
 	}
 }
 void swap(int* a, int* b)
@@ -60,13 +60,13 @@ void swap(int* a, int* b)
 }
 
 void fix_bst(struct node *root){
-	struct node *first, *middle, *last, *prev;
-	first = middle = last = prev = NULL;
-	fixedBST(root, &first, &middle, &last, &prev);
-	if (first && last)
-		swap(&(first->data), &(last->data));
-	else if (first && middle)
-		swap(&(first->data), &(middle->data));
+	struct node *current, *mid, *last, *prev;
+	current = mid = last = prev = NULL;
+	fixedBST(root, &current, &mid, &last, &prev);
+	if (current && last)
+		swap(&(current->data), &(last->data));
+	else if (current && mid)
+		swap(&(current->data), &(mid->data));
 	else
 		return;
 }
