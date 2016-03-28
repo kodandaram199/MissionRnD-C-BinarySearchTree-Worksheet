@@ -33,9 +33,45 @@ struct node{
 	struct node *right;
 };
 
+struct node * bst(int *arr, int begin, int end)
+{
 
+
+	if (begin > end)
+		return NULL;
+	/*
+	calculate mid point.
+	All the values to left of mid are less than mid.
+	Similarly values to right of mid are less than mid
+	we take mid as root and values < mid as left subtree
+	and values > mid as right subtree
+	
+	*/
+
+	/*
+	If tree is not balanced AVL rotations can be applied
+	*/
+
+	int mid = (begin + end) / 2;
+
+	struct node *root = (struct node*) malloc(sizeof(struct node));
+
+	root->data = arr[mid];
+	root->left = bst(arr, begin, mid - 1);
+	root->right = bst(arr, mid + 1, end);
+
+	return root;
+
+
+}
 struct node * convert_array_to_bst(int *arr, int len){
 	
-	return NULL;
-}
+	if (arr == NULL)
+		return NULL;
+
+	int begin = 0;
+	int end = len;
+	return bst(arr, begin, end);
+	
+	}
 

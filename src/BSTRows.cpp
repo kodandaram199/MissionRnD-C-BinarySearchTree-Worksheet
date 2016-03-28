@@ -29,9 +29,47 @@ struct node{
 	struct node *right;
 };
 
+int getHeight(struct node *root){
 
+	if (root == NULL)
+		return -1;
+
+	if (root->right == NULL && root->left == NULL)
+		return 1;
+
+	int HeightOfLeftSubtree = getHeight(root->left);
+	int HeightOfRightSubtree = getHeight(root->right);
+
+	return HeightOfLeftSubtree > HeightOfRightSubtree ? HeightOfLeftSubtree + 1 : HeightOfRightSubtree + 1;
+}
+
+void toArray(struct node *root, int *arr, int level, int *position)
+{
+	if (root == NULL)
+		return;
+	if (level == 1)
+	{
+		arr[(*position)++] = root->data;
+	}
+	else
+	{
+		toArray(root->right, arr, level - 1, position);
+		toArray(root->left, arr, level - 1, position);
+	}
+
+}
 
 int* BSTRighttoLeftRows(struct node* root)
-{
-    return NULL;
+{ 
+	if (root == NULL)
+		return NULL;
+	int position = 0; 
+	int level;
+	int * array = (int *)malloc(sizeof(int) * 30);
+	int height = getHeight(root);
+	for (level = 1; level <= height; level++)
+	{
+		toArray(root, array, level, &position);
+	}
+	return array;
 }
